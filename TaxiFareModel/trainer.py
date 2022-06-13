@@ -1,3 +1,4 @@
+from pickle import MEMOIZE
 from sklearn.pipeline import Pipeline
 from TaxiFareModel.encoders import DistanceTransformer, TimeFeaturesEncoder
 from TaxiFareModel.data import clean_data, get_data
@@ -7,6 +8,14 @@ from sklearn.compose import ColumnTransformer
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from TaxiFareModel.utils import compute_rmse
+import ml_flow_test
+from mlflow.tracking import MlflowClient
+import mlflow
+from mlflow import set_tracking_uri
+from memoized_property import memoized_property
+
+
+
 
 class Trainer():
     def __init__(self, X, y):
@@ -47,6 +56,29 @@ class Trainer():
         rmse = compute_rmse(y_pred, y_test)
         print(rmse)
         return rmse
+
+    @memoized_property
+    def mlflow_client(self):
+        mlflow.set_tracking_uri(uri="https://mlflow.lewagon.ai/")
+        return MlflowClient()
+
+    @memoized_property
+    def mlflow_experiment_id(self):
+        try:
+            return self.mlflow_client.create_experiment(self.experiment_name)
+        except BaseException:
+            return self.mlflow_client.get_experiment_by_name(self.experiment_name).experiment_id
+
+    @memoized_property
+    def mlflow_run(self):
+        return self.mlflow_client.create_run(self.mlflow_experiment_id)
+
+    def mlflow_log_param(self, key, value):
+        self.mlflow_client.log_param(self.mlflow_run.info.run_id, key, value)
+
+    def mlflow_log_metric(self, key, value):
+        self.mlflow_client.log_metric(self.mlflow_run.info.run_id, key, value)
+
 
 
 if __name__ == "__main__":

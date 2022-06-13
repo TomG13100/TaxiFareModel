@@ -1,11 +1,14 @@
 import pandas as pd
-
+import os
+import inspect
 AWS_BUCKET_PATH = "s3://wagon-public-datasets/taxi-fare-train.csv"
 
 
 def get_data(nrows=10_000):
     '''returns a DataFrame with nrows from s3 bucket'''
-    df = pd.read_csv(AWS_BUCKET_PATH, nrows=nrows)
+    goal_path = os.path.join(os.path.abspath(inspect.getfile(get_data)), '../../raw_data/train.csv')
+    csv_path = os.path.normpath(goal_path)
+    df = pd.read_csv(csv_path, nrows=nrows)
     return df
 
 

@@ -1,0 +1,15 @@
+artifact_uri: file:///home/tom/code/TomG13100/TaxiFareModel/mlruns/1/c60bc5dd2ffd4970bc5a20585641cf4f/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '1'
+lifecycle_stage: active
+name: ''
+run_id: c60bc5dd2ffd4970bc5a20585641cf4f
+run_uuid: c60bc5dd2ffd4970bc5a20585641cf4f
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1654609288025
+status: 1
+tags: []
+user_id: unknown
